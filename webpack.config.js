@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin    = require('uglifyjs-webpack-plugin');
 const proj_path         = require('./config/path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 let sourcemap, watcher;
 
@@ -71,6 +72,7 @@ module.exports = {
             chunks   : ['works', 'common'] ,
             template : proj_path.pages.works + '/works.pug'
         }),
+        new CleanWebpackPlugin('dist'),
         new ExtractTextPlugin('./css/[name].css'),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'common'
@@ -110,7 +112,11 @@ module.exports = {
                 test : /\.css$/,
                 use  : ExtractTextPlugin.extract({
                     fallback : 'style-loader',
-                    use      : 'css-loader'
+                    use      : [{
+                        loader: 'css-loader', options: {
+                            sourceMap: true
+                        }
+                    }]
                 })
             },
             {
@@ -135,7 +141,14 @@ module.exports = {
                 options : {
                     name: 'images/[name].[ext]'
                 }
-            }   
+            },
+            {
+                test: /\.(woff|woff2|ttf)$/,
+                loader: 'file-loader',
+                options: {
+                    name: 'fonts/[name].[ext]'
+                }
+            }
         ]
     }
 };
