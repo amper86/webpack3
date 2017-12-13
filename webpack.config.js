@@ -143,7 +143,7 @@ module.exports = {
                 }
             },
             {
-                test: /\.(woff|woff2|ttf)$/,
+                test: /\.(woff|woff2|ttf|otf)$/,
                 loader: 'file-loader',
                 options: {
                     name: 'fonts/[name].[ext]'
